@@ -1,4 +1,5 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
+import { PlainBody } from 'src/core/decorators/plain-body.decorator';
 
 import { TrackService } from './track.service';
 
@@ -7,12 +8,12 @@ export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Post('/track')
-  track(@Body() params) {
+  async track(@PlainBody() params) {
     return this.trackService.track(params);
   }
 
   @Post('/trackweb')
-  trackweb(@Body() params) {
+  async trackweb(@PlainBody() params) {
     return this.trackService.trackweb(params);
   }
 }
