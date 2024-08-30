@@ -1,11 +1,33 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import configuration from 'src/core/config';
+import { JwtAuthGuard } from 'src/core/guards/auth.guard';
+import { RolesGuard } from 'src/core/guards/roles.guard';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AuthModule } from './module/auth/auth.module';
+import { UserModule } from './module/user/user.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      cache: true, //缓存
+      load: [configuration], //加载配置文件
+      isGlobal: true, //设置为全局
+    }),
+    AuthModule,
+    UserModule,
+  ],
+  controllers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

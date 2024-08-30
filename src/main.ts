@@ -7,6 +7,8 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
+  // 设置全局路由前缀
+  app.setGlobalPrefix('api');
   // 注册全局拦截器
   app.useGlobalInterceptors(new GlobalInterceptor());
 

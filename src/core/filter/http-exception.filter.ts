@@ -30,6 +30,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
     logger.error(data);
 
     // 使用底层平台express的response，设置返回的状态码， 发送错误信息
-    response.status(status).json();
+    response.status(status).json(data);
   }
 }

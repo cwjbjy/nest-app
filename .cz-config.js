@@ -12,8 +12,8 @@ module.exports = {
       {value: 'addLog', name: '👨🏻‍💻添加log:  代码回退'},
     ],
     scopes: [
-      {name: 'javascript'},
-      {name: 'typescript'},
+      {name: '全局配置'},
+      {name: '页面功能'},
     ],
     messages: {
       type: '选择一种你的提交类型:',
