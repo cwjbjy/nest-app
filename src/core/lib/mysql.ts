@@ -25,7 +25,7 @@ async function query(sql: string, values?: any[]) {
 
   try {
     // 查询
-    const [rows] = await conn.execute(sql, values);
+    const [rows] = await conn.query(sql, values);
     return rows;
   } catch (error) {
     throw error;

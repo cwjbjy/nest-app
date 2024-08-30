@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AllExceptionsFilter } from 'src/core/filter/any-exception.filter';
 import { HttpExceptionFilter } from 'src/core/filter/http-exception.filter';
@@ -11,6 +12,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   // 注册全局拦截器
   app.useGlobalInterceptors(new GlobalInterceptor());
+
+  //全局注册自定义管道
+  app.useGlobalPipes(new ValidationPipe());
 
   // 注册全局错误的过滤器
   app.useGlobalFilters(new AllExceptionsFilter());

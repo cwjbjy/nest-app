@@ -7,5 +7,5 @@ export enum Role {
   HUMAN = 4, // 普通用户
 }
 
-export const ROLES_KEY = 'roles';
+export const ROLES_KEY = 'role';
 export const RequireRole = (role: Role) => SetMetadata(ROLES_KEY, role);

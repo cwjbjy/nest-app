@@ -15,9 +15,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus(); // 获取异常状态码
 
     // 设置错误信息
-    const message = exception.message
-      ? exception.message
-      : `${status >= 500 ? 'Service Error' : 'Client Error'}`;
+    const message =
+      exception.getResponse() &&
+      (exception.getResponse() as { message?: string[] | string }).message
+        ? (exception.getResponse() as { message: string[] | string }).message
+        : exception.getResponse();
 
     const data = {
       data: {},

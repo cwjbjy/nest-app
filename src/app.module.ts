@@ -9,6 +9,8 @@ import { JwtAuthGuard } from 'src/core/guards/auth.guard';
 import { RolesGuard } from 'src/core/guards/roles.guard';
 
 import { AuthModule } from './module/auth/auth.module';
+import { TestModule } from './module/test/test.module';
+import { TrackModule } from './module/track/track.module';
 import { UserModule } from './module/user/user.module';
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { UserModule } from './module/user/user.module';
     }),
     AuthModule,
     UserModule,
+    TestModule,
+    TrackModule,
   ],
   controllers: [],
   providers: [
