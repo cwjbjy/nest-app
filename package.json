@@ -29,6 +29,7 @@
     "@nestjs/platform-express": "^10.0.0",
     "@types/js-yaml": "^4.0.9",
     "js-yaml": "^4.1.0",
+    "mysql2": "^3.11.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "path-to-regexp": "^7.1.0",

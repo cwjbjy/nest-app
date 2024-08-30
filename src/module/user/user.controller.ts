@@ -22,4 +22,9 @@ export class UserController {
     之后的在别的模块，直接使用req.user便可获取用户信息 */
     return req.user;
   }
+
+  @Get('/getUsers')
+  getUsers() {
+    return this.userService.getUsers();
+  }
 }

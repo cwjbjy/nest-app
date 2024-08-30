@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import query from 'src/core/lib/mysql';
 
 @Injectable()
 export class UserService {
@@ -11,5 +12,10 @@ export class UserService {
     //这里根据用户名与用户ID进行加密，生成token
     const accessToken = this.jwtService.sign(payload);
     return accessToken;
+  }
+
+  getUsers() {
+    const result = query('SELECT * FROM USER;');
+    return result;
   }
 }
