@@ -9,6 +9,7 @@ import { JwtAuthGuard } from 'src/core/guards/auth.guard';
 import { RolesGuard } from 'src/core/guards/roles.guard';
 
 import { AuthModule } from './module/auth/auth.module';
+import { ChatModule } from './module/chat/chat.module';
 import { TestModule } from './module/test/test.module';
 import { TrackModule } from './module/track/track.module';
 import { UserModule } from './module/user/user.module';
@@ -27,6 +28,7 @@ import { UserModule } from './module/user/user.module';
     UserModule,
     TestModule,
     TrackModule,
+    ChatModule,
   ],
   controllers: [],
   providers: [
