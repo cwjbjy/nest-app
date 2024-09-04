@@ -11,11 +11,11 @@ export class UserService {
 
   //根据用户名与密码查找用户
   async findUser(params: UserDto) {
-    const { userName, passWord } = params;
+    const { userName, password } = params;
 
     const data = await query(
-      'SELECT * FROM USER WHERE user_name=? and password=?;',
-      [userName, passWord],
+      'SELECT * FROM USER WHERE userName=? and password=?;',
+      [userName, password],
     );
 
     return data;
@@ -25,7 +25,7 @@ export class UserService {
   async findUserFromName(params: RegisterDto) {
     const { userName } = params;
 
-    const data = await query('SELECT * FROM USER WHERE user_name=?;', [
+    const data = await query('SELECT * FROM USER WHERE userName=?;', [
       userName,
     ]);
 
@@ -34,11 +34,11 @@ export class UserService {
 
   //新增用户
   async addUser(params: RegisterDto) {
-    const { userName, passWord, createTime, photo } = params;
+    const { userName, password, createTime, photo } = params;
 
     await query(
-      'INSERT INTO USER (user_name,password,authority,role,createTime,photo) VALUES (?,?,?,?,?,?);',
-      [userName, passWord, Role.HUMAN, Role.HUMAN, createTime, photo],
+      'INSERT INTO USER (userName,password,authority,role,createTime,photo) VALUES (?,?,?,?,?,?);',
+      [userName, password, Role.HUMAN, Role.HUMAN, createTime, photo],
     );
 
     return { messgae: '注册成功' };
@@ -51,9 +51,9 @@ export class UserService {
   }
 
   //查找单条用户创建时间
-  async getUser(user_name: string) {
-    const data = await query('SELECT createTime FROM USER WHERE user_name=?;', [
-      user_name,
+  async getUser(userName: string) {
+    const data = await query('SELECT createTime FROM USER WHERE userName=?;', [
+      userName,
     ]);
     return data[0].createTime;
   }
@@ -66,9 +66,9 @@ export class UserService {
 
   //更新用户信息
   async updateUser(params: UpdateUserDto) {
-    const { id, user_name, password } = params;
-    await query('UPDATE USER SET user_name=?, password=? WHERE id=?;', [
-      user_name,
+    const { id, userName, password } = params;
+    await query('UPDATE USER SET userName=?, password=? WHERE id=?;', [
+      userName,
       password,
       id,
     ]);
@@ -76,18 +76,18 @@ export class UserService {
   }
 
   //查询用户头像
-  async getImage(user_name: string) {
-    const data = await query('SELECT photo FROM USER WHERE user_name=?;', [
-      user_name,
+  async getImage(userName: string) {
+    const data = await query('SELECT photo FROM USER WHERE userName=?;', [
+      userName,
     ]);
     return data;
   }
 
   //更新头像（图片已存储，将图片信息更新到数据库中）
-  async uploadFile(filename, user_name) {
-    await query('UPDATE USER SET photo=? WHERE user_name=?;', [
+  async uploadFile(filename, userName) {
+    await query('UPDATE USER SET photo=? WHERE userName=?;', [
       filename,
-      user_name,
+      userName,
     ]);
     return { messgae: '上传成功' };
   }
