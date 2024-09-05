@@ -6,8 +6,6 @@ import {
   Get,
   Body,
   Query,
-  HttpException,
-  HttpStatus,
   Delete,
   Put,
   UploadedFile,
@@ -15,11 +13,8 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
-import { isEmpty } from 'lodash';
 import { diskStorage } from 'multer';
-import { Role } from 'src/core/decorators/require-role.decorator';
 
-import { manageMenu, menu } from './constant';
 import {
   UserDto,
   RegisterDto,
@@ -36,25 +31,14 @@ export class UserController {
 
   @ApiOperation({ summary: '登录' })
   @Post('/login')
-  async login(@Body() params: UserDto) {
-    const data = await this.userService.findUser(params);
-    if (isEmpty(data))
-      throw new HttpException('查询结果为空', HttpStatus.BAD_REQUEST);
-    const accessToken = this.userService.createToken(params);
-    return {
-      token: accessToken,
-      auth: data[0].role === Role.SUPER_ADMIN ? manageMenu : menu,
-    };
+  login(@Body() params: UserDto) {
+    return this.userService.login(params);
   }
 
   @ApiOperation({ summary: '注册' })
   @Post('/register')
-  async register(@Body() params: RegisterDto) {
-    const user = await this.userService.findUserFromName(params);
-    if (!isEmpty(user))
-      throw new HttpException('用户名已存在', HttpStatus.FORBIDDEN);
-    const data = await this.userService.addUser(params);
-    return data;
+  register(@Body() params: RegisterDto) {
+    return this.userService.register(params);
   }
 
   @ApiOperation({ summary: '查询所有用户' })

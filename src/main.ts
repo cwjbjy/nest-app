@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import helmet from 'helmet';
 import { AllExceptionsFilter } from 'src/core/filter/any-exception.filter';
 import { HttpExceptionFilter } from 'src/core/filter/http-exception.filter';
 import { GlobalInterceptor } from 'src/core/interceptor/global.interceptor';
@@ -24,6 +25,13 @@ async function bootstrap() {
   // 注册全局错误的过滤器
   app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
+
+  // web 安全，防常见漏洞
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false, //允许跨源访问静态资源
+    }),
+  );
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Nest-Admin')

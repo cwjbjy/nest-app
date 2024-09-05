@@ -1,28 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
+import { isEmpty } from 'lodash';
 import { Role } from 'src/core/decorators/require-role.decorator';
 import query from 'src/core/lib/mysql';
 
+import { manageMenu, menu } from './constant';
 import { UserDto, RegisterDto, UpdateUserDto } from './dto';
-
 @Injectable()
 export class UserService {
   constructor(private readonly jwtService: JwtService) {}
 
-  //根据用户名与密码查找用户
-  async findUser(params: UserDto) {
-    const { userName, password } = params;
+  async login(params: UserDto) {
+    const data = await this.findUserFromName(params);
+    if (isEmpty(data))
+      throw new HttpException('用户名不存在', HttpStatus.BAD_REQUEST);
+    const password = data[0].password;
+    if (!bcrypt.compareSync(params.password, password)) {
+      throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
+    }
+    const accessToken = this.createToken(params);
+    return {
+      token: accessToken,
+      auth: data[0].role === Role.SUPER_ADMIN ? manageMenu : menu,
+    };
+  }
 
-    const data = await query(
-      'SELECT * FROM USER WHERE userName=? and password=?;',
-      [userName, password],
-    );
-
+  async register(params: RegisterDto) {
+    const user = await this.findUserFromName(params);
+    if (!isEmpty(user))
+      throw new HttpException('用户名已存在', HttpStatus.BAD_REQUEST);
+    const data = await this.addUser(params);
     return data;
   }
 
   //根据用户名查找用户
-  async findUserFromName(params: RegisterDto) {
+  async findUserFromName(params) {
     const { userName } = params;
 
     const data = await query('SELECT * FROM USER WHERE userName=?;', [
@@ -35,10 +48,11 @@ export class UserService {
   //新增用户
   async addUser(params: RegisterDto) {
     const { userName, password, createTime, photo } = params;
+    const newPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
     await query(
       'INSERT INTO USER (userName,password,authority,role,createTime,photo) VALUES (?,?,?,?,?,?);',
-      [userName, password, Role.HUMAN, Role.HUMAN, createTime, photo],
+      [userName, newPassword, Role.HUMAN, Role.HUMAN, createTime, photo],
     );
 
     return { messgae: '注册成功' };
@@ -67,9 +81,10 @@ export class UserService {
   //更新用户信息
   async updateUser(params: UpdateUserDto) {
     const { id, userName, password } = params;
+    const newPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
     await query('UPDATE USER SET userName=?, password=? WHERE id=?;', [
       userName,
-      password,
+      newPassword,
       id,
     ]);
     return { messgae: '修改成功' };
