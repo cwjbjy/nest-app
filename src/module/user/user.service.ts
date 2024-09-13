@@ -4,12 +4,16 @@ import * as bcrypt from 'bcrypt';
 import { isEmpty } from 'lodash';
 import { Role } from 'src/core/decorators/require-role.decorator';
 import query from 'src/core/lib/mysql';
+import { RedisCacheService } from 'src/core/redis-cache/redis-cache.service';
 
 import { manageMenu, menu } from './constant';
 import { UserDto, RegisterDto, UpdateUserDto } from './dto';
 @Injectable()
 export class UserService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly jwtService: JwtService,
+    private redisCacheService: RedisCacheService,
+  ) {}
 
   async login(params: UserDto) {
     const data = await this.findUserFromName(params);
@@ -20,6 +24,11 @@ export class UserService {
       throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
     }
     const accessToken = this.createToken(params);
+    await this.redisCacheService.set(
+      `${params.userName}&${params.password}`,
+      accessToken,
+      60 * 60 * 24,
+    );
     return {
       token: accessToken,
       auth: data[0].role === Role.SUPER_ADMIN ? manageMenu : menu,
