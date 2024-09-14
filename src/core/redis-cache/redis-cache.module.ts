@@ -10,12 +10,7 @@ import { RedisCacheService } from './redis-cache.service';
     {
       provide: 'REDIS_CLIENT',
       async useFactory() {
-        const client = createClient({
-          socket: {
-            host: 'localhost',
-            port: 6379,
-          },
-        });
+        const client = createClient();
         await client.connect();
         return client;
       },

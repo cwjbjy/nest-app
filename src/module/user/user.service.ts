@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { isEmpty } from 'lodash';
 import { Role } from 'src/core/decorators/require-role.decorator';
 import query from 'src/core/lib/mysql';
+import { TOKEN_CACHE_TIME } from 'src/core/redis-cache/constant';
 import { RedisCacheService } from 'src/core/redis-cache/redis-cache.service';
 
 import { manageMenu, menu } from './constant';
@@ -27,7 +28,7 @@ export class UserService {
     await this.redisCacheService.set(
       `${params.userName}&${params.password}`,
       accessToken,
-      60 * 60 * 24,
+      TOKEN_CACHE_TIME,
     );
     return {
       token: accessToken,

@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { pathToRegexp } from 'path-to-regexp';
+import { TOKEN_CACHE_TIME } from 'src/core/redis-cache/constant';
 import { RedisCacheService } from 'src/core/redis-cache/redis-cache.service';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -37,10 +38,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         throw new UnauthorizedException('在其他地方登录');
       }
 
+      //增加token时间
       this.redisCacheService.set(
         `${payload.userName}&${payload.password}`,
         token,
-        60 * 60 * 24,
+        TOKEN_CACHE_TIME,
       );
     }
 
