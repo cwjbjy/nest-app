@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import configuration from 'src/core/config';
+import configuration from 'src/config';
 import { JwtAuthGuard } from 'src/core/guards/auth.guard';
 import { RolesGuard } from 'src/core/guards/roles.guard';
 import { RedisCacheModule } from 'src/core/redis-cache/redis-cache.module';

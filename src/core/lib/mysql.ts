@@ -1,5 +1,5 @@
 import * as mysql from 'mysql2/promise';
-import configuration from 'src/core/config';
+import configuration from 'src/config';
 
 const { db } = configuration();
 
