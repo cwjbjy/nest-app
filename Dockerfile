@@ -16,6 +16,7 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/src/config/production.yml ./src/config/production.yml
+COPY --from=builder /app/public ./public
 
 EXPOSE 9000
 
