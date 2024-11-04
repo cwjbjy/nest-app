@@ -7,7 +7,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import configuration from 'src/config';
 import { JwtAuthGuard } from 'src/core/guards/auth.guard';
 import { RolesGuard } from 'src/core/guards/roles.guard';
-import { RedisCacheModule } from 'src/core/redis-cache/redis-cache.module';
 
 import { AuthModule } from './module/auth/auth.module';
 import { ChatModule } from './module/chat/chat.module';
@@ -30,7 +29,6 @@ import { UserModule } from './module/user/user.module';
     TestModule,
     TrackModule,
     ChatModule,
-    RedisCacheModule,
   ],
   controllers: [],
   providers: [
