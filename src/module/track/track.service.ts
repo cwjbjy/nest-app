@@ -9,7 +9,7 @@ export class TrackService {
   async track(params: TrackDto[]) {
     const values = params.map((item) => [
       item.userData.vs,
-      item.device.browser,
+      item.device.browser.name,
       item.url,
       item.referrer,
       item.date,

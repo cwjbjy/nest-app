@@ -7,7 +7,7 @@ export class TrackDto {
 
   @ApiProperty({ description: '设备信息', required: true })
   @IsNotEmpty({ message: '缺少设备信息' })
-  readonly device: { browser: string };
+  readonly device: { browser: { name: string } };
 
   @ApiProperty({ description: '当前页面', required: true })
   @IsNotEmpty({ message: '当前页面' })
