@@ -9,6 +9,7 @@ export const manageMenu = [
   'magnifying',
   'drag',
   'I18n',
+  'openai',
   'chatRoom',
   'manage',
 ];
@@ -24,5 +25,6 @@ export const menu = [
   'magnifying',
   'drag',
   'I18n',
+  'openai',
   'chatRoom',
 ];
