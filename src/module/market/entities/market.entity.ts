@@ -3,6 +3,7 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema()
 export class FoodSchema {
+  [x: string]: any;
   @Prop()
   name: string;
 

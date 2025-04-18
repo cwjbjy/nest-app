@@ -49,7 +49,7 @@ export class MarketService {
 
   async addFood(updateMarketDto: UpdateMarketDto) {
     await this.marketModel.updateOne(
-      { name: updateMarketDto.name },
+      { _id: updateMarketDto.categoryId },
       {
         $push: {
           foods: updateMarketDto.foods,
@@ -60,20 +60,23 @@ export class MarketService {
   }
 
   async deleteFood(deleteMarketDto: DeleteFoodDto) {
-    const image = deleteMarketDto.image;
-    const fileName = path.basename(image);
-    const imagePath = join(
-      __dirname,
-      '../../..',
-      'public/images/market',
-      fileName,
-    );
-    fs.unlinkSync(imagePath);
+    if (deleteMarketDto.image) {
+      const image = deleteMarketDto.image;
+      const fileName = path.basename(image);
+      const imagePath = join(
+        __dirname,
+        '../../..',
+        'public/images/market',
+        fileName,
+      );
+      fs.unlinkSync(imagePath);
+    }
+
     await this.marketModel.updateOne(
-      { name: deleteMarketDto.category },
+      { _id: deleteMarketDto.categoryId },
       {
         $pull: {
-          foods: { _id: deleteMarketDto.id },
+          foods: { _id: deleteMarketDto.foodId },
         },
       },
     );
@@ -81,20 +84,62 @@ export class MarketService {
   }
 
   async updateFoodWithoutImage(updateFoodDto: UpdateFoodDto) {
-    await this.marketModel.updateOne(
-      {
-        name: updateFoodDto.category,
-        'foods._id': updateFoodDto.id,
-      },
-      {
-        $set: {
-          'foods.$.name': updateFoodDto.name,
-          'foods.$.burden': updateFoodDto.burden,
-          'foods.$.describe': updateFoodDto.describe,
+    //之后使用事务进行优化
+
+    //分类不变
+    if (updateFoodDto.categoryId === updateFoodDto.targetCategoryId) {
+      await this.marketModel.updateOne(
+        {
+          _id: updateFoodDto.categoryId,
+          'foods._id': updateFoodDto.foodId,
         },
-      },
-    );
-    return '添加成功';
+        {
+          $set: {
+            'foods.$.name': updateFoodDto.name,
+            'foods.$.burden': updateFoodDto.burden,
+            'foods.$.describe': updateFoodDto.describe,
+            'foods.$.image': updateFoodDto.image,
+          },
+        },
+      );
+    } else {
+      //分类变动
+      const sourceCategory = await this.marketModel.findById(
+        updateFoodDto.categoryId,
+      );
+
+      const dishIndex = sourceCategory.foods.findIndex(
+        (f) => f._id.toString() === updateFoodDto.foodId,
+      );
+
+      const food = sourceCategory.foods[dishIndex].toObject();
+
+      // 创建更新后的菜品对象
+      const updatedDish = {
+        ...food,
+        name: updateFoodDto.name,
+        describe: updateFoodDto.describe,
+        burden: updateFoodDto.burden,
+      };
+
+      if (updateFoodDto.image) {
+        updatedDish.image = updateFoodDto.image;
+      }
+
+      //从原分类删除
+      await this.marketModel.updateOne(
+        { _id: updateFoodDto.categoryId },
+        { $pull: { foods: { _id: updateFoodDto.foodId } } },
+      );
+
+      //添加到目标分类
+      await this.marketModel.updateOne(
+        { _id: updateFoodDto.targetCategoryId },
+        { $push: { foods: updatedDish } },
+      );
+    }
+
+    return '更新成功';
   }
 
   async updateFood(updateFoodDto: UpdateFoodDto) {
@@ -107,20 +152,7 @@ export class MarketService {
       fileName,
     );
     fs.unlinkSync(imagePath);
-    await this.marketModel.updateOne(
-      {
-        name: updateFoodDto.category,
-        'foods._id': updateFoodDto.id,
-      },
-      {
-        $set: {
-          'foods.$.name': updateFoodDto.name,
-          'foods.$.burden': updateFoodDto.burden,
-          'foods.$.describe': updateFoodDto.describe,
-          'foods.$.image': updateFoodDto.image,
-        },
-      },
-    );
+    await this.updateFoodWithoutImage(updateFoodDto);
     return '添加成功';
   }
 

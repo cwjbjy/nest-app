@@ -6,7 +6,7 @@ import { CreateFoodDto } from './create-market.dto';
 export class UpdateMarketDto {
   @ApiProperty({ description: '菜的分类', required: true })
   @IsNotEmpty({ message: '缺少分类' })
-  readonly name: string;
+  readonly categoryId: string;
 
   @ApiProperty({ description: '菜', required: true })
   @IsNotEmpty({ message: '缺少菜' })
@@ -16,11 +16,15 @@ export class UpdateMarketDto {
 export class UpdateFoodDto extends PartialType(CreateFoodDto) {
   @ApiProperty({ description: '菜的分类', required: true })
   @IsNotEmpty({ message: '缺少分类' })
-  readonly category: string;
+  readonly categoryId: string;
+
+  @ApiProperty({ description: '菜的新分类', required: true })
+  @IsNotEmpty({ message: '缺少菜的新分类' })
+  readonly targetCategoryId: string;
 
   @ApiProperty({ description: '食物id', required: true })
   @IsNotEmpty({ message: '缺少食物id' })
-  readonly id: string;
+  readonly foodId: string;
 
   @ApiProperty({ description: '旧图片地址' })
   readonly oldImage: string;
@@ -29,13 +33,12 @@ export class UpdateFoodDto extends PartialType(CreateFoodDto) {
 export class DeleteFoodDto {
   @ApiProperty({ description: '菜的分类', required: true })
   @IsNotEmpty({ message: '缺少分类' })
-  readonly category: string;
+  readonly categoryId: string;
 
   @ApiProperty({ description: '食物id', required: true })
   @IsNotEmpty({ message: '缺少食物id' })
-  readonly id: string;
+  readonly foodId: string;
 
-  @ApiProperty({ description: '图片地址', required: true })
-  @IsNotEmpty({ message: '缺少图片地址' })
+  @ApiProperty({ description: '图片地址' })
   readonly image: string;
 }
