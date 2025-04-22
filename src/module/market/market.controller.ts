@@ -5,7 +5,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Put,
   Query,
   Delete,
@@ -66,7 +65,7 @@ export class MarketController {
     type: UpdateFoodDto,
     required: true,
   })
-  @Patch('/updateFoodWithoutImage')
+  @Put('/updateFoodWithoutImage')
   updateFoodWithoutImage(@Body() updateFoodDto: UpdateFoodDto) {
     return this.marketService.updateFoodWithoutImage(updateFoodDto);
   }
@@ -76,7 +75,7 @@ export class MarketController {
     type: UpdateFoodDto,
     required: true,
   })
-  @Patch('/updateFood')
+  @Put('/updateFood')
   updateFood(@Body() updateFoodDto: UpdateFoodDto) {
     return this.marketService.updateFood(updateFoodDto);
   }
