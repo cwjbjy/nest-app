@@ -15,6 +15,7 @@ import { MarketModule } from './module/market/market.module';
 import { TestModule } from './module/test/test.module';
 import { TrackModule } from './module/track/track.module';
 import { UserModule } from './module/user/user.module';
+import { OrderModule } from './order/order.module';
 
 const { db } = configuration();
 
@@ -38,6 +39,7 @@ const { db } = configuration();
     TrackModule,
     ChatModule,
     MarketModule,
+    OrderModule,
   ],
   controllers: [],
   providers: [

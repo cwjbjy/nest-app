@@ -33,7 +33,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   checkWhiteList(context: ExecutionContext): boolean {
     const req = context.switchToHttp().getRequest();
     const i = this.globalWhiteList.findIndex((route) => {
-      if (req.url.includes('market')) return true;
+      if (req.url.includes('market') || req.url.includes('order')) return true;
       // 请求方法类型相同
       if (req.method.toUpperCase() === route.method.toUpperCase()) {
         // 对比 url
