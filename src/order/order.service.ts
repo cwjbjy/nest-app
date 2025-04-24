@@ -11,12 +11,15 @@ export class OrderService {
   constructor(@InjectModel(Order.name) private orderModel: Model<Order>) {}
 
   create(createOrderDto: CreateOrderDto) {
-    const food = new this.orderModel(createOrderDto);
+    const food = new this.orderModel({
+      ...createOrderDto,
+      createdAt: new Date(),
+    });
     return food.save();
   }
 
   async findAll() {
-    const foods = await this.orderModel.find();
+    const foods = await this.orderModel.find().sort({ createdAt: -1 }).exec();
     return foods;
   }
 

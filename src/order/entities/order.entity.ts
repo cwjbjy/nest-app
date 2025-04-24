@@ -28,6 +28,9 @@ export class Order {
   date: string;
 
   @Prop()
+  createdAt: string;
+
+  @Prop()
   num: number;
 
   @Prop([FoodSchema])
