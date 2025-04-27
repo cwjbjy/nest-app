@@ -18,9 +18,17 @@ export class OrderService {
     return food.save();
   }
 
-  async findAll() {
-    const foods = await this.orderModel.find().sort({ createdAt: -1 }).exec();
-    return foods;
+  async find(skip, limit) {
+    const foods = await this.orderModel
+      .find()
+      .sort({ createdAt: -1 })
+      .skip(skip) // 跳过指定数量的记录
+      .limit(limit)
+      .exec();
+
+    // 获取总记录数
+    const total = await this.orderModel.countDocuments().exec();
+    return { foods, total };
   }
 
   // findOne(id: number) {

@@ -60,6 +60,19 @@ export class MarketController {
     return this.marketService.deleteFood(deleteMarketDto);
   }
 
+  @ApiOperation({ summary: '更新某个菜品被点数量，不包含图片的更新' })
+  @ApiBody({
+    type: [UpdateMarketDto],
+    required: true,
+  })
+  @Put('/updateFoodWithNum')
+  updateFoodWithNum(
+    @Body('foodIds') foodIds: string[],
+    @Body('increment') num = 1,
+  ) {
+    return this.marketService.updateFoodWithNum(foodIds, num);
+  }
+
   @ApiOperation({ summary: '更新某个菜品，不包含图片的更新' })
   @ApiBody({
     type: UpdateFoodDto,
@@ -111,7 +124,7 @@ export class MarketController {
         },
       }),
       limits: {
-        fileSize: 5 * 1024 * 1024, // 限制文件大小为 5MB
+        fileSize: 10 * 1024 * 1024, // 限制文件大小为 10MB
       },
     }),
   )

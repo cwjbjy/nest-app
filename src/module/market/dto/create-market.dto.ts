@@ -17,6 +17,10 @@ export class CreateFoodDto {
   @ApiProperty({ description: '菜的图片', required: true })
   @IsNotEmpty({ message: '缺少图片' })
   readonly image: string;
+
+  @ApiProperty({ description: '菜的被点数量', required: true })
+  @IsNotEmpty({ message: '缺少数量' })
+  readonly num: number;
 }
 
 export class CreateMarketDto {

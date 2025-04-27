@@ -15,6 +15,9 @@ export class FoodSchema {
 
   @Prop()
   image: string;
+
+  @Prop({ default: 0 })
+  num: number;
 }
 
 @Schema()

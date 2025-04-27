@@ -3,6 +3,7 @@ import {
   Get,
   Post,
   Body,
+  Query,
   // Patch,
   Delete,
 } from '@nestjs/common';
@@ -27,10 +28,10 @@ export class OrderController {
     return this.orderService.create(createOrderDto);
   }
 
-  @ApiOperation({ summary: '查询整个订单' })
-  @Get('/getAll')
-  findAll() {
-    return this.orderService.findAll();
+  @ApiOperation({ summary: '查询订单' })
+  @Get('/getOrder')
+  find(@Query('skip') skip: number, @Query('pageSize') pageSize: number) {
+    return this.orderService.find(skip, pageSize);
   }
 
   // @Get(':id')

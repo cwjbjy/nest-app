@@ -83,6 +83,26 @@ export class MarketService {
     return '删除成功';
   }
 
+  async updateFoodWithNum(foodIds: string[], num: number) {
+    // 为每个 foodId 创建一个 arrayFilter 条件
+    const arrayFilters = foodIds.map((id, index) => ({
+      [`elem${index}._id`]: id,
+    }));
+
+    // 动态构建更新操作
+    const update = {
+      $inc: foodIds.reduce((acc, id, index) => {
+        acc[`foods.$[elem${index}].num`] = num;
+        return acc;
+      }, {}),
+    };
+
+    return this.marketModel.updateMany({}, update, {
+      arrayFilters: arrayFilters,
+      new: true,
+    });
+  }
+
   async updateFoodWithoutImage(updateFoodDto: UpdateFoodDto) {
     //之后使用事务进行优化
 
