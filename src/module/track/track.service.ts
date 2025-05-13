@@ -10,13 +10,13 @@ export class TrackService {
     const values = params.map((item) => [
       item.userData.vs,
       item.device.browser.name,
-      item.url,
-      item.referrer,
+      item.uuid,
+      item.type,
       item.date,
-      item.duration,
+      JSON.stringify(item.data),
     ]);
     await query(
-      'INSERT INTO TRACK (vsManage,deviceType,currentUrl,refererUrl,userTime,delayTime) VALUES ?',
+      'INSERT INTO TRACK (vsManage,deviceType,userId,errorType,currentDate,userData) VALUES?',
       [values],
     );
     return;
