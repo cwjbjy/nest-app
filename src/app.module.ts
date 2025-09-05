@@ -9,6 +9,7 @@ import configuration from 'src/config';
 import { JwtAuthGuard } from 'src/core/guards/auth.guard';
 import { RolesGuard } from 'src/core/guards/roles.guard';
 
+import { AiModule } from './module/ai/ai.module';
 import { AuthModule } from './module/auth/auth.module';
 import { ChatModule } from './module/chat/chat.module';
 import { MarketModule } from './module/market/market.module';
@@ -40,6 +41,7 @@ const { db } = configuration();
     ChatModule,
     MarketModule,
     OrderModule,
+    AiModule,
   ],
   controllers: [],
   providers: [
