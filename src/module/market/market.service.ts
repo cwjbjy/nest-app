@@ -99,7 +99,6 @@ export class MarketService {
 
     return this.marketModel.updateMany({}, update, {
       arrayFilters: arrayFilters,
-      new: true,
     });
   }
 
